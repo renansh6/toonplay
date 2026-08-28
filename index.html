@@ -8,11 +8,29 @@ document.head.appendChild(a);
 </script>
 <script
   src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-xcod-sck
-  data-utmify-prevent-subids
   async
   defer
 ></script>
+<script>
+	(function () {
+		var trackingKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "xcod", "sck", "subid"];
+		var query = new URLSearchParams(window.location.search);
+		var checkoutLinks = document.querySelectorAll('a[href*="pay.lowify.com.br/checkout"]');
+
+		checkoutLinks.forEach(function (link) {
+			var checkoutUrl = new URL(link.href);
+
+			trackingKeys.forEach(function (key) {
+				var value = query.get(key);
+				if (value && !checkoutUrl.searchParams.has(key)) {
+					checkoutUrl.searchParams.set(key, value);
+				}
+			});
+
+			link.href = checkoutUrl.toString();
+		});
+	})();
+</script>
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
